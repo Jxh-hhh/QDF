@@ -4,14 +4,14 @@ from qiskit.circuit.library import QFT
 import time
 
 
-qc = QFT(40)
-qc = qc.compose(QFT(30, inverse=True), list(range(30)))
+n_qubits = 35
+qc = QFT(n_qubits)
+qc = qc.compose(QFT(n_qubits, inverse=True), list(range(n_qubits)))
 sim = AerSimulator(method='statevector', device='GPU', cuStateVec_enable=True)
+# sim = AerSimulator()
 tqc = transpile(qc, sim)
 tqc.measure_all()
 t = time.time()
 res = sim.run(tqc, shots=30000)
 print(res.result())
 print(time.time() - t)
-
-
